@@ -1,11 +1,31 @@
-Testes:
+sync
 
-5 threads, 200 requisições
-media / warmup / real1 / real2 (ms) / media
-antigo: 588.789 / 533.152 / 545.907
-	583/
-novo com early e execute: 537.641 / 201,40.279 / 180
-novo com early e jsp paralelo: 637.863 / 527.763 / 525.865 / 526.814
-novo com early e segura pra comecar jsp: 
-novo com early e jsp paralelo e buffer: 
-novo 2 com recycle session entre um unico user: 
+		watcher.updateEnrollmentsIfFinished();
+		result.include("subscription", enrollments.lastValidSubscription(loggedUser));
+		result.include("enrollments", enrollments.getCurrentMonth(loggedUser));
+
+
+async java 8+
+		async.execute(() -> watcher.updateEnrollmentsIfFinished());
+		async.include("subscription", () -> enrollments.lastValidSubscription(loggedUser), Subscription.class);
+		async.include("enrollments", () -> enrollments.getCurrentMonth(loggedUser), List.class);
+
+
+async java 7-		
+
+		async.execute(new Runnable() {
+			public void run() {
+				watcher.updateEnrollmentsIfFinished();
+			}
+		});
+		
+		async.include("subscription", new Callable<Subscription>() {
+			public Subscription call() throws Exception {
+				return enrollments.lastValidSubscription(loggedUser);
+			}
+		}, Subscription.class);
+		async.include("enrollments", new Callable<List<Enrollment>>() {
+			public List<Enrollment> call() throws Exception {
+				return enrollments.getCurrentMonth(loggedUser);
+			}
+		}, List.class);
