@@ -6,8 +6,11 @@ sync
 
 
 async java 8+
+
 		async.execute(() -> watcher.updateEnrollmentsIfFinished());
+		
 		async.include("subscription", () -> enrollments.lastValidSubscription(loggedUser), Subscription.class);
+		
 		async.include("enrollments", () -> enrollments.getCurrentMonth(loggedUser), List.class);
 
 
