@@ -18,7 +18,7 @@ public class SessionFutureCallback<T> implements FutureCallback {
 //		merda...
 		
 		// System.out.println("Session future callback for " + provider);
-//		provider.finished();
+		provider.freeThreadLocal();
 	}
 
 }

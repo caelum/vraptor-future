@@ -25,10 +25,9 @@ public class FutureSessionProvider implements ComponentFactory<Session> {
 		this.factory = factory;
 	}
 
-	protected Session getSessionForThisThread() {
+	private Session getSessionForThisThread() {
 		if (sessions.get() == null) {
 			Session session = factory.openSession();
-//			System.out.println("Opening session " + session.hashCode());
 			allSessions.add(session);
 			sessions.set(session);
 			return session;
@@ -38,8 +37,7 @@ public class FutureSessionProvider implements ComponentFactory<Session> {
 
 	public void finished() {
 		if (sessions.get() != null) {
-			Session session = getSessionForThisThread();
-//			System.out.println("Closing session " + this + " @ " + session.hashCode());
+			Session session = sessions.get();
 			session.close();
 		}
 	}
@@ -61,13 +59,15 @@ public class FutureSessionProvider implements ComponentFactory<Session> {
 				new Class[] { Session.class }, handler);
 	}
 
-
 	@PreDestroy
 	public void shutdown() {
-		for(Session s : allSessions) {
-//			System.out.println("Closing " + s.hashCode());
+		for (Session s : allSessions) {
 			s.close();
 		}
+	}
+
+	public void freeThreadLocal() {
+		sessions.remove();
 	}
 
 }

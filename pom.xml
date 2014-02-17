@@ -24,31 +24,13 @@
 		<dependency>
 			<groupId>br.com.caelum</groupId>
 			<artifactId>vraptor</artifactId>
-			<version>4.0.0-beta-4</version>
+			<version>3.5.1</version>
 		</dependency>
-<dependency>
-	<groupId>org.hibernate</groupId>
-	<artifactId>hibernate-core</artifactId>
-	<version>4.3.0.Final</version>
-</dependency>
-<dependency>
-	<groupId>hsqldb</groupId>
-	<artifactId>hsqldb</artifactId>
-	<version>1.8.0.10</version>
-</dependency>
-            
 		<dependency>
-			<groupId>org.jboss.weld.servlet</groupId>
-			<artifactId>weld-servlet</artifactId>
-			<version>2.1.1.Final</version>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-core</artifactId>
+			<version>4.3.0.Final</version>
 		</dependency>
-
-		<dependency>
-			<groupId>org.jboss.weld.se</groupId>
-			<artifactId>weld-se-core</artifactId>
-			<version>2.1.1.Final</version>
-		</dependency>
-
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
