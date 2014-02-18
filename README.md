@@ -47,3 +47,39 @@ Async java 7-
 				return enrollments.getCurrentMonth(loggedUser);
 			}
 		});
+
+		
+Pool Size
+=================
+
+To configure the pool size (default 10) override your AsyncConfig class:
+
+@ApplicationScoped
+@Component
+public class MyConfig extends AsyncConfig {
+
+	public int getPoolSize() {
+		return 100;
+	}
+
+}
+
+
+Hibernate Support
+=================
+
+Hibernate is supported by default using the OpenSessionInView pattern. If you want to optimize your code and
+not allow any hibernate lazy loading, override the:
+
+	@Component
+	public class CustomSessionFutureCallback extends SessionFutureCallback {
+	
+		SessionFutureCallback(FutureSessionProvider provider) {
+			super(provider);
+		}
+	
+		protected boolean shouldAllowOpenSessionInView() {
+			return false;
+		}
+	
+	}

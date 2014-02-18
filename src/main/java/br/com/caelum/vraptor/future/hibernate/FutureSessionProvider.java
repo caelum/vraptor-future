@@ -62,7 +62,9 @@ public class FutureSessionProvider implements ComponentFactory<Session> {
 	@PreDestroy
 	public void shutdown() {
 		for (Session s : allSessions) {
-			s.close();
+			if(s.isOpen()) {
+				s.close();
+			}
 		}
 	}
 

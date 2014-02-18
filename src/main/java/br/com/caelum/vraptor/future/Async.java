@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
@@ -29,8 +28,6 @@ import br.com.caelum.vraptor.proxy.SuperMethod;
 @Component
 public class Async {
 
-	private static final ExecutorService executor = Executors
-			.newFixedThreadPool(10);
 
 	private final List<FutureCallback> callbacks;
 	private final List<Future<?>> tasks = new ArrayList<>();
@@ -38,18 +35,21 @@ public class Async {
 	private final HttpServletRequest request;
 
 	private final Proxifier profixier;
+	private final AsyncPool pool;
+
 
 	public Async(List<FutureCallback> callbacks, HttpServletRequest request,
-			Proxifier profixier) {
+			Proxifier profixier, AsyncPool pool) {
 		this.callbacks = callbacks;
 		this.request = request;
 		this.profixier = profixier;
+		this.pool = pool;
 	}
 
 	public <T> Async execute(Callable<T> callable) {
 		FutureTask<T> task = new FutureTask<T>(new CallbackableTask<T>(
 				callable, callbacks));
-		executor.execute(task);
+		pool.run(task);
 		return this;
 	}
 
@@ -68,20 +68,14 @@ public class Async {
 	}
 
 	public <T> Async execute(final Runnable runnable) {
-		Callable<Object> cb = new Callable<Object>() {
-			public Object call() throws Exception {
-				runnable.run();
-				return null;
-			}
-		};
-		execute(cb);
+		execute(Executors.callable(runnable));
 		return this;
 	}
 
 	public <T> void include(String key, Callable<T> callable) {
 		CallbackableTask<T> callbackable = new CallbackableTask<T>(callable,
 				callbacks);
-		final Future<T> task = executor.submit(callbackable);
+		final Future<T> task = pool.submit(callbackable);
 		tasks.add(task);
 
 		MethodInvocation handler = new  MethodInvocation() {
