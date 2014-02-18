@@ -14,10 +14,6 @@ public class SessionFutureCallback<T> implements FutureCallback {
 
 	@Override
 	public void run() {
-//		tenh oque fazer algo aqui.... liberar ela para A MESMA THREAD!!! ASSIM SE O HIBRENATE PRECISAR, VOCE AINDA CONSEGUE COM ESSE CARA!
-//		merda...
-		
-		// System.out.println("Session future callback for " + provider);
 		provider.freeThreadLocal();
 	}
 
