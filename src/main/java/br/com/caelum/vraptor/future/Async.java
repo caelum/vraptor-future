@@ -2,6 +2,7 @@ package br.com.caelum.vraptor.future;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -77,7 +78,7 @@ public class Async {
 		return this;
 	}
 
-	public <T> void include(String key, Callable<T> callable, Class<?> type) {
+	public <T> void include(String key, Callable<T> callable) {
 		CallbackableTask<T> callbackable = new CallbackableTask<T>(callable,
 				callbacks);
 		final Future<T> task = executor.submit(callbackable);
@@ -97,8 +98,11 @@ public class Async {
 			}
 			
 		};
+        ParameterizedType parameterizedType = (ParameterizedType) callable.getClass()
+                .getGenericSuperclass();
+		Class type = (Class) parameterizedType.getActualTypeArguments()[0];
 		request.setAttribute(key, this.profixier.proxify(type, handler));
-}
+	}
 
 	void waitUntilFinished() throws InterruptedException, ExecutionException {
 		for (Future<?> task : tasks) {
