@@ -7,6 +7,7 @@ import java.util.concurrent.Callable;
 
 import org.junit.Test;
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class CallablesTest {
 	
 	class ReturnNothing implements Callable {
