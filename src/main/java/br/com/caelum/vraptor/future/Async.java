@@ -2,7 +2,6 @@ package br.com.caelum.vraptor.future;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Callable;
@@ -92,9 +91,9 @@ public class Async {
 			}
 			
 		};
-        ParameterizedType parameterizedType = (ParameterizedType) callable.getClass()
-                .getGenericSuperclass();
-		Class type = (Class) parameterizedType.getActualTypeArguments()[0];
+
+		Class type = Callables.getReturnTypeFor(callable);
+
 		request.setAttribute(key, this.profixier.proxify(type, handler));
 	}
 

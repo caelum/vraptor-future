@@ -6,7 +6,9 @@ import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
 import br.com.caelum.vraptor.ioc.ApplicationScoped;
+import br.com.caelum.vraptor.ioc.Component;
 
+@Component
 @ApplicationScoped
 public class AsyncPool {
 
